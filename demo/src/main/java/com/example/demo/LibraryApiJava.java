@@ -1,5 +1,6 @@
 package com.example.demo;
 import java.io.IOException;
+import org.apache.catalina.util.URLEncoder;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -26,9 +27,27 @@ public class LibraryApiJava {
 
         Application application = new Application(bookName, author, pref, city);
 
-        // 1. 楽天ブックスAPIを呼び出して本の情報を取得
-        String rakutenUrl = "https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?applicationId=" + API_KEY_RAKU
-                + "&format=json&title=" + application.getBookName() + "&author=" + application.getAuthor();
+    //    // 1. 楽天ブックスAPIを呼び出して本の情報を取得
+      //  String rakutenUrl = "https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?applicationId=" + API_KEY_RAKU
+       //         + "&format=json&title=" + application.getBookName() + "&author=" + application.getAuthor();
+ String rakutenUrl ="";
+
+try {
+    String encodedTitle = URLEncoder.encode(application.getBookName() , "UTF-8");
+    String encodedAuthor = URLEncoder.encode(author, "UTF-8");
+
+   rakutenUrl = "https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?applicationId=" + API_KEY_RAKU
+                + "&format=json&title=" +  encodedTitle + "&author=" + encodedAuthor;
+
+    HttpClient httpClient = HttpClients.createDefault();
+    HttpGet httpGet = new HttpGet(rakutenUrl);
+    HttpResponse response = httpClient.execute(httpGet);
+    String jsonResponse = EntityUtils.toString(response.getEntity());
+
+    // レスポンスの処理...
+} catch (IOException e) {
+    e.printStackTrace();
+}
 
                 try {
                     JSONParser parser = new JSONParser();
