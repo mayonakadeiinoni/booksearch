@@ -10,6 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.io.*;
+import java.net.*;
 
 public class LibraryApiJava {
 
@@ -17,7 +19,7 @@ public class LibraryApiJava {
     static String API_KEY_Lib = "f97ee4442195b7b3e53286cc4ad93d0c"; // 図書館APIキー
 
     public static void main(String[] args) {
-        String lineMessage = "本の名前/作者名/県/市"; // ここにLINEからのメッセージを設定
+        String lineMessage = "仮面の告白/三島由紀夫/県/市"; // ここにLINEからのメッセージを設定
 
         String[] lineMessageText = lineMessage.split("/");
         String bookName = lineMessageText[0];
@@ -33,8 +35,8 @@ public class LibraryApiJava {
  String rakutenUrl ="";
 
 try {
-    String encodedTitle = URLEncoder.encode(application.getBookName() , "UTF-8");
-    String encodedAuthor = URLEncoder.encode(author, "UTF-8");
+    String encodedTitle = java.net.URLEncoder.encode(application.getBookName() , "UTF-8");
+    String encodedAuthor = java.net.URLEncoder.encode(author, "UTF-8");
 
    rakutenUrl = "https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?applicationId=" + API_KEY_RAKU
                 + "&format=json&title=" +  encodedTitle + "&author=" + encodedAuthor;
@@ -43,7 +45,7 @@ try {
     HttpGet httpGet = new HttpGet(rakutenUrl);
     HttpResponse response = httpClient.execute(httpGet);
     String jsonResponse = EntityUtils.toString(response.getEntity());
-
+    System.out.println(jsonResponse);
     // レスポンスの処理...
 } catch (IOException e) {
     e.printStackTrace();
