@@ -54,9 +54,12 @@ try {
 
                 try {
                     // jsonの抜き出しは
+                    // jackson  https://www.jsonschema2pojo.org/
+                    // https://qiita.com/opengl-8080/items/b613b9b3bc5d796c840c
                     JSONParser parser = new JSONParser();
                     JSONObject json = (JSONObject) parser.parse(jsonResponse);
                     JSONArray items = (JSONArray) json.get("Items");
+                    JSONObject itemdd = ((JSONObject) items.get(0));
                     int minPriceIndex = rakutenMiniPrice(items);
                 
                     JSONObject item = (JSONObject) items.get(minPriceIndex);
