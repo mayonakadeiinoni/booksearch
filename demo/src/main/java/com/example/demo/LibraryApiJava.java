@@ -34,7 +34,7 @@ public class LibraryApiJava {
        //         + "&format=json&title=" + application.getBookName() + "&author=" + application.getAuthor();
  String rakutenUrl ="";
  String jsonResponse = "";
-
+ String isbnNum = "";
 try {
     String encodedTitle = java.net.URLEncoder.encode(application.getBookName() , "UTF-8");
     String encodedAuthor = java.net.URLEncoder.encode(author, "UTF-8");
@@ -64,6 +64,7 @@ try {
                     String salesDate = (String) item.get("salesDate");
                     String itemPrice = (String) item.get("itemPrice");
                     String itemUrl = (String) item.get("itemUrl");
+                    isbnNum = (String) item.get("isbn");
                 
                     String answer1 = "書誌情報一覧です!!!\n" + "出版日: " + publisherName + "\n出版日: " + salesDate + "\n値段: " + itemPrice
                             + "\n商品URL: " + itemUrl;
@@ -84,7 +85,7 @@ try {
         // （同様のHTTPリクエストの設定とデータ処理を行ってください）
 
         // 3. 中古本情報を取得
-        String isbnNum = application.getIsbnNum();
+        isbnNum = application.getIsbnNum();
         String answer3 = "中古本の最安値を検索しました!! このURLを押してね!!\nhttps://bookget.net/search?q=" + isbnNum;
         System.out.println(answer3);
     }
@@ -110,8 +111,8 @@ try {
         String libraryInfo = "";
 
         try {
-            String encodedPref = URLEncoder.encode(pref, "UTF-8");
-            String encodedCity = URLEncoder.encode(city, "UTF-8");
+            String encodedPref = java.net.URLEncoder.encode(pref, "UTF-8");
+            String encodedCity = java.net.URLEncoder.encode(city, "UTF-8");
 
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
                     + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=100&distance=1000&format=json";
@@ -156,7 +157,7 @@ try {
         String libraryAvailability = "";
 
         try {
-            String encodedISBN = URLEncoder.encode(isbnNum, "UTF-8");
+            String encodedISBN = java.net.URLEncoder.encode(isbnNum, "UTF-8");
             String url = "https://api.calil.jp/check?appkey=" + API_KEY_Lib
                     + "&isbn=" + encodedISBN + "&systemid=" + systemidStr + "&format=json";
 
@@ -173,7 +174,7 @@ try {
         return libraryAvailability;
     }
 }
-
+   class Application{
     private String bookName;
     private String author;
     private String pref;
