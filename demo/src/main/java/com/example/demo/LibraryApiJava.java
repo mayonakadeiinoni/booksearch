@@ -1,4 +1,5 @@
 package com.example.demo;
+
 import java.io.IOException;
 import org.apache.catalina.util.URLEncoder;
 import org.apache.http.HttpResponse;
@@ -20,7 +21,6 @@ public class LibraryApiJava {
 
     public static void main(String[] args) {
         String lineMessage = "仮面の告白/三島由紀夫/県/市"; // ここにLINEからのメッセージを設定
-
         String[] lineMessageText = lineMessage.split("/");
         String bookName = lineMessageText[0];
         String author = lineMessageText[1];
@@ -33,6 +33,7 @@ public class LibraryApiJava {
       //  String rakutenUrl = "https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?applicationId=" + API_KEY_RAKU
        //         + "&format=json&title=" + application.getBookName() + "&author=" + application.getAuthor();
  String rakutenUrl ="";
+ String jsonResponse = "";
 
 try {
     String encodedTitle = java.net.URLEncoder.encode(application.getBookName() , "UTF-8");
@@ -44,7 +45,7 @@ try {
     HttpClient httpClient = HttpClients.createDefault();
     HttpGet httpGet = new HttpGet(rakutenUrl);
     HttpResponse response = httpClient.execute(httpGet);
-    String jsonResponse = EntityUtils.toString(response.getEntity());
+     jsonResponse = EntityUtils.toString(response.getEntity());
     System.out.println(jsonResponse);
     // レスポンスの処理...
 } catch (IOException e) {
@@ -52,8 +53,9 @@ try {
 }
 
                 try {
+                    // jsonの抜き出しは
                     JSONParser parser = new JSONParser();
-                    JSONObject json = (JSONObject) parser.parse(rakutenUrl);
+                    JSONObject json = (JSONObject) parser.parse(jsonResponse);
                     JSONArray items = (JSONArray) json.get("Items");
                     int minPriceIndex = rakutenMiniPrice(items);
                 
@@ -71,6 +73,14 @@ try {
                     e.printStackTrace();
                 }
         // 2. 図書館APIを呼び出して図書館情報を取得
+          // 2. 図書館APIを呼び出して図書館情報を取得
+         String libraryInfo = searchNearbyLibraries(pref, city);
+        System.out.println(libraryInfo);
+
+        // 2-2: 指定図書館に蔵書があるかを検索
+        String systemidStr = libraryInfo != null ? extractSystemIds(libraryInfo) : "";
+        String libraryAvailability = searchLibraryAvailability(isbnNum, systemidStr);
+        System.out.println(libraryAvailability);
         // （同様のHTTPリクエストの設定とデータ処理を行ってください）
 
         // 3. 中古本情報を取得
@@ -95,8 +105,75 @@ try {
         return miniPriceNum;
     }
 
+    
+    public static String searchNearbyLibraries(String pref, String city) {
+        String libraryInfo = "";
+
+        try {
+            String encodedPref = URLEncoder.encode(pref, "UTF-8");
+            String encodedCity = URLEncoder.encode(city, "UTF-8");
+
+            String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
+                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=100&distance=1000&format=json";
+
+            HttpClient httpClient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpClient.execute(httpGet);
+            String jsonResponse = EntityUtils.toString(response.getEntity());
+
+            libraryInfo = jsonResponse;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return libraryInfo;
+    }
+
+    public static String extractSystemIds(String libraryInfo) {
+        String systemidStr = "";
+
+        try {
+            JSONParser parser = new JSONParser();
+            JSONArray libraries = (JSONArray) parser.parse(libraryInfo);
+
+            for (int i = 0; i < libraries.size(); i++) {
+                JSONObject library = (JSONObject) libraries.get(i);
+                String systemid = (String) library.get("systemid");
+                systemidStr += systemid;
+
+                if (i != libraries.size() - 1) {
+                    systemidStr += ",";
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return systemidStr;
+    }
+
+    public static String searchLibraryAvailability(String isbnNum, String systemidStr) {
+        String libraryAvailability = "";
+
+        try {
+            String encodedISBN = URLEncoder.encode(isbnNum, "UTF-8");
+            String url = "https://api.calil.jp/check?appkey=" + API_KEY_Lib
+                    + "&isbn=" + encodedISBN + "&systemid=" + systemidStr + "&format=json";
+
+            HttpClient httpClient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpClient.execute(httpGet);
+            String jsonResponse = EntityUtils.toString(response.getEntity());
+
+            libraryAvailability = jsonResponse;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return libraryAvailability;
+    }
 }
-class Application {
+
     private String bookName;
     private String author;
     private String pref;
