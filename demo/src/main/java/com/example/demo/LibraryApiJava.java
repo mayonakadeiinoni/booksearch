@@ -59,15 +59,19 @@ try {
                     JSONParser parser = new JSONParser();
                     JSONObject json = (JSONObject) parser.parse(jsonResponse);
                     JSONArray items = (JSONArray) json.get("Items");
-                    JSONObject itemdd = ((JSONObject) items.get(0));
-                    int minPriceIndex = rakutenMiniPrice(items);
-                
-                    JSONObject item = (JSONObject) items.get(minPriceIndex);
-                    String publisherName = (String) item.get("publisherName");
-                    String salesDate = (String) item.get("salesDate");
-                    String itemPrice = (String) item.get("itemPrice");
-                    String itemUrl = (String) item.get("itemUrl");
-                    isbnNum = (String) item.get("isbn");
+                  
+            // "Items"内の最初のオブジェクトを取得
+                   JSONObject firstItem = (JSONObject) items.get(0);
+                   JSONObject firstItema = (JSONObject) firstItem.get("Item");;
+            // "title"キーの値を取得
+                      String title = (String) firstItema.get("title");
+
+                     System.out.println("Title: " + title);
+                    String publisherName = (String) firstItema.get("publisherName");
+                    String salesDate = (String) firstItema.get("salesDate");
+                    String itemPrice = (String) firstItema.get("itemPrice");
+                    String itemUrl = (String) firstItema.get("itemUrl");
+                    isbnNum = (String) firstItema.get("isbn");
                 
                     String answer1 = "書誌情報一覧です!!!\n" + "出版日: " + publisherName + "\n出版日: " + salesDate + "\n値段: " + itemPrice
                             + "\n商品URL: " + itemUrl;
