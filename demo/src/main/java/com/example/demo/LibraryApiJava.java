@@ -69,8 +69,8 @@ try {
                      System.out.println("Title: " + title);
                     String publisherName = (String) firstItema.get("publisherName");
                     String salesDate = (String) firstItema.get("salesDate");
-                    String itemPrice = (String) firstItema.get("itemPrice");
-                    String itemUrl = (String) firstItema.get("itemUrl");
+                    long itemPrice = (long) firstItema.get("itemPrice");
+                    String itemUrl = (String) firstItema.get("largeImageUrl");
                     isbnNum = (String) firstItema.get("isbn");
                 
                     String answer1 = "書誌情報一覧です!!!\n" + "出版日: " + publisherName + "\n出版日: " + salesDate + "\n値段: " + itemPrice
@@ -92,7 +92,7 @@ try {
         // （同様のHTTPリクエストの設定とデータ処理を行ってください）
 
         // 3. 中古本情報を取得
-        isbnNum = application.getIsbnNum();
+       // isbnNum = application.getIsbnNum();
         String answer3 = "中古本の最安値を検索しました!! このURLを押してね!!\nhttps://bookget.net/search?q=" + isbnNum;
         System.out.println(answer3);
     }
@@ -186,7 +186,7 @@ try {
     private String author;
     private String pref;
     private String city;
-    private String isbnNum;
+
 
     public Application(String bookName, String author, String pref, String city) {
         this.bookName = bookName;
@@ -211,11 +211,5 @@ try {
         return city;
     }
 
-    public String getIsbnNum() {
-        return isbnNum;
-    }
 
-    public void setIsbnNum(String isbnNum) {
-        this.isbnNum = isbnNum;
-    }
 }
