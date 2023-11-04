@@ -2,17 +2,21 @@ package com.example.demo;
 
 // 楽天ブックスAPIで取得した一つの本の情報を入れるクラス
 public class BookInfo {
-    private String bookName;
-    private String author;
-    private String isbnNum;
-    private String itemCaption;
-    private String isbn;
-    private long itemPrice;
-    private String publisherName;
-    private String salesDate;
-    private String seriesName;
+    private String bookName = "";
+    private String author = "";
+    private String isbnNum = "";
+    private String itemCaption = "";
+    private String isbn = "";
+    private long itemPrice = -1;
+    private String publisherName = "";
+    private String salesDate = "";
+    private String seriesName = "";
+    private String itemUrl = "";
 
-    public BookInfo(String bookName, String author, String isbnNum, String itemCaption, String isbn, long itemPrice, String publisherName, String salesDate, String seriesName) {
+    public BookInfo(){
+
+    }
+    public BookInfo(String bookName, String author, String isbnNum, String itemCaption, String isbn, long itemPrice, String publisherName, String salesDate, String seriesName,String itemUrl) {
         this.bookName = bookName;
         this.author = author;
         this.isbnNum = isbnNum;
@@ -22,6 +26,7 @@ public class BookInfo {
         this.publisherName = publisherName;
         this.salesDate = salesDate;
         this.seriesName = seriesName;
+        this.itemUrl = itemUrl;
     }
 
     public String getBookName() {
