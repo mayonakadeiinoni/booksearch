@@ -32,6 +32,12 @@ public class test {
          BooksInfos infos = new BooksInfos();
          infos = infos.RakutenBooksSearch(application);
          System.out.println(infos);
+
+         
+        // 3. 中古本情報を取得
+       // isbnNum = application.getIsbnNum();
+        String answer3 = "中古本の最安値を検索しました!! このURLを押してね!!\nhttps://bookget.net/search?q=" + infos.getBookInfoList().get(0).getIsbnNum();
+        System.out.println(answer3);
         
 
     }
