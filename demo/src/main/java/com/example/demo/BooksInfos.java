@@ -98,8 +98,10 @@ public class BooksInfos {
  @Override
  public String toString() {
      StringBuilder result = new StringBuilder();
+     int count = 1;
      result.append("BooksInfos [\n");
      for (BookInfo bookInfo : bookInfoList) {
+         result.append(count++ +"ヒット目:");
          result.append("  " + bookInfo.toString() + "\n");
      }
      result.append("]");
