@@ -63,7 +63,7 @@ public class BooksInfos {
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(jsonResponse);
         JSONArray items = (JSONArray) json.get("Items");
-      
+
         for(int i = 0 ;i<items.size() ;i++){
         
 // "Items"内の最初のオブジェクトを取得
@@ -80,32 +80,30 @@ public class BooksInfos {
         String seriesName = (String) firstItema.get("seriesName");
         String itemUrl =  (String) firstItema.get("itemUrl");
     
-        BookInfo book = new BookInfo(bookName,author,isbnNum,itemCaption,itemPrice,publisherName,salesDate,seriesName,itemUrl);
-        }
+        BookInfo book = new BookInfo(bookName, author, isbnNum, itemCaption, itemPrice, publisherName, salesDate, seriesName,itemUrl) ;
+        infos.bookInfoList.add(book);
+            
+    }
     } catch (Exception  e) {
         e.printStackTrace();
     }
+    
+
 
     return infos;
     }
 
     // 他に必要なメソッドを追加できます
+ // toString()メソッドをオーバーライド
+ @Override
+ public String toString() {
+     StringBuilder result = new StringBuilder();
+     result.append("BooksInfos [\n");
+     for (BookInfo bookInfo : bookInfoList) {
+         result.append("  " + bookInfo.toString() + "\n");
+     }
+     result.append("]");
 
-    public static void main(String[] args) {
-        // BooksInfos クラスを使用して BookInfo のリストを管理する例
-        BooksInfos booksInfos = new BooksInfos();
-
-        // BookInfo オブジェクトの作成
-        BookInfo book1 = new BookInfo("Book1", "Author1", "123456789", "Description1", "ISBN1", 1000, "Publisher1", "2023-01-01", "Series1");
-        BookInfo book2 = new BookInfo("Book2", "Author2", "987654321", "Description2", "ISBN2", 1500, "Publisher2", "2023-02-01", "Series2");
-
-        // BookInfo を BooksInfos に追加
-        booksInfos.addBookInfo(book1);
-        booksInfos.addBookInfo(book2);
-
-        // BookInfo リストの取得
-        List<BookInfo> bookInfoList = booksInfos.getBookInfoList();
-
-        // BookInfo リストの操作などを行うことができます
-    }
+     return result.toString();
+ }
 }

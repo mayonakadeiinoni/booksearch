@@ -28,7 +28,10 @@ public class test {
         String city = lineMessageText[3];
 
         // 楽天api実行部
-        BooksInfos infos = new BooksInfos();
+        Application application = new Application(bookName, author, pref, city);
+         BooksInfos infos = new BooksInfos();
+         infos = infos.RakutenBooksSearch(application);
+         System.out.println(infos);
         
 
     }

@@ -6,7 +6,6 @@ public class BookInfo {
     private String author = "";
     private String isbnNum = "";
     private String itemCaption = "";
-    private String isbn = "";
     private long itemPrice = -1;
     private String publisherName = "";
     private String salesDate = "";
@@ -16,12 +15,12 @@ public class BookInfo {
     public BookInfo(){
 
     }
-    public BookInfo(String bookName, String author, String isbnNum, String itemCaption, String isbn, long itemPrice, String publisherName, String salesDate, String seriesName,String itemUrl) {
+    public BookInfo(String bookName, String author, String isbnNum, String itemCaption, long itemPrice, String publisherName, String salesDate, String seriesName,String itemUrl) {
         this.bookName = bookName;
         this.author = author;
         this.isbnNum = isbnNum;
         this.itemCaption = itemCaption;
-        this.isbn = isbn;
+        
         this.itemPrice = itemPrice;
         this.publisherName = publisherName;
         this.salesDate = salesDate;
@@ -45,10 +44,6 @@ public class BookInfo {
         return itemCaption;
     }
 
-    public String getIsbn() {
-        return isbn;
-    }
-
     public long getItemPrice() {
         return itemPrice;
     }
@@ -64,4 +59,19 @@ public class BookInfo {
     public String getSeriesName() {
         return seriesName;
     }
+
+     // toString()メソッドをオーバーライド
+     @Override
+     public String toString() {
+         return "フィールド名: フィールド値\n" +
+                "bookName: " + bookName + "\n" +
+                "author: " + author + "\n" +
+                "isbnNum: " + isbnNum + "\n" +
+                "itemCaption: " + itemCaption + "\n" +
+                "itemPrice: " + itemPrice + "\n" +
+                "publisherName: " + publisherName + "\n" +
+                "salesDate: " + salesDate + "\n" +
+                "seriesName: " + seriesName + "\n" +
+                "itemUrl: " + itemUrl;
+     }
 }
