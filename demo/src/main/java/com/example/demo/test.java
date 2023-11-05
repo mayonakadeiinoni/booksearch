@@ -20,7 +20,7 @@ public class test {
 
     public static void main(String[] args) {
         // 入力部分はおいおい変える
-        String lineMessage = "仮面の告白/三島由紀夫/県/市"; // ここにLINEからのメッセージを設定
+        String lineMessage = "異邦人/カミュ/県/市"; // ここにLINEからのメッセージを設定
         String[] lineMessageText = lineMessage.split("/");
         String bookName = lineMessageText[0];
         String author = lineMessageText[1];
