@@ -28,7 +28,7 @@ public class LibraryApiJava {
         String city = lineMessageText[3];
 
         Application application = new Application(bookName, author, pref, city);
-
+/* 
     //    // 1. 楽天ブックスAPIを呼び出して本の情報を取得
       //  String rakutenUrl = "https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?applicationId=" + API_KEY_RAKU
        //         + "&format=json&title=" + application.getBookName() + "&author=" + application.getAuthor();
@@ -79,9 +79,10 @@ try {
                 
                 } catch (Exception  e) {
                     e.printStackTrace();
-                }
+                }*/
         // 2. 図書館APIを呼び出して図書館情報を取得
           // 2. 図書館APIを呼び出して図書館情報を取得
+        String isbnNum = "9784102114018";
          String libraryInfo = searchNearbyLibraries(pref, city);
         System.out.println(libraryInfo);
 
@@ -120,9 +121,9 @@ try {
         try {
             String encodedPref = java.net.URLEncoder.encode(pref, "UTF-8");
             String encodedCity = java.net.URLEncoder.encode(city, "UTF-8");
-
+            String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
-                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=100&distance=1000&format=json";
+                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=10&distance=100&format=json&callback="+encodedEmpty;
 
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
@@ -147,6 +148,8 @@ try {
             for (int i = 0; i < libraries.size(); i++) {
                 JSONObject library = (JSONObject) libraries.get(i);
                 String systemid = (String) library.get("systemid");
+                String formal = (String) library.get("formal");
+                System.out.println(formal);
                 systemidStr += systemid;
 
                 if (i != libraries.size() - 1) {
@@ -165,15 +168,27 @@ try {
 
         try {
             String encodedISBN = java.net.URLEncoder.encode(isbnNum, "UTF-8");
+            String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/check?appkey=" + API_KEY_Lib
-                    + "&isbn=" + encodedISBN + "&systemid=" + systemidStr + "&format=json";
-
+                    + "&isbn=" + encodedISBN + "&systemid=" + systemidStr + "&format=json&callback="+"no";
+        try {
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             HttpResponse response = httpClient.execute(httpGet);
             String jsonResponse = EntityUtils.toString(response.getEntity());
+            JSONParser parser = new JSONParser();
+            System.out.println(jsonResponse);
+           
+            JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
+             // "continue" の値を取得
+             long continueValue = (Long) jsonObject.get("continue");
+
+             System.out.println("continue: " + continueValue);
 
             libraryAvailability = jsonResponse;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         } catch (IOException e) {
             e.printStackTrace();
         }
