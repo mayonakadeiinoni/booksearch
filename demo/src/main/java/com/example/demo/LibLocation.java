@@ -4,7 +4,7 @@ package com.example.demo;
 public class LibLocation {
     private String pref;
     private String city;
-
+    
     public LibLocation() {
         this.pref = "愛知県";
         this.city = "名古屋市";

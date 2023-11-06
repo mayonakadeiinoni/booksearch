@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class LibraryApiJava {
 
@@ -88,8 +89,20 @@ try {
 
         // 2-2: 指定図書館に蔵書があるかを検索
         String systemidStr = libraryInfo != null ? extractSystemIds(libraryInfo) : "";
+        
+        // 文字列をカンマで分割
+        String[] parts = systemidStr .split(",");
+        
+        // 重複を削除するためにセットを使用
+        Set<String> uniqueParts = new LinkedHashSet<>(Arrays.asList(parts));
+        
+        // 重複を削除した文字列をカンマで連結
+        systemidStr  = String.join(",", uniqueParts);
+        
+      
+        System.out.println(systemidStr);
         String libraryAvailability = searchLibraryAvailability(isbnNum, systemidStr);
-        System.out.println(libraryAvailability);
+      //  System.out.println(libraryAvailability);
         // （同様のHTTPリクエストの設定とデータ処理を行ってください）
 
         // 3. 中古本情報を取得
@@ -123,7 +136,7 @@ try {
             String encodedCity = java.net.URLEncoder.encode(city, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
-                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=10&distance=100&format=json&callback="+encodedEmpty;
+                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=20&distance=50&format=json&callback="+encodedEmpty;
 
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
@@ -165,23 +178,38 @@ try {
 
     public static String searchLibraryAvailability(String isbnNum, String systemidStr) {
         String libraryAvailability = "";
-
+        String[] ids = systemidStr.split(",");
         try {
             String encodedISBN = java.net.URLEncoder.encode(isbnNum, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/check?appkey=" + API_KEY_Lib
                     + "&isbn=" + encodedISBN + "&systemid=" + systemidStr + "&format=json&callback="+"no";
+            long continueValue = 1;
+            while(continueValue == 1){
         try {
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             HttpResponse response = httpClient.execute(httpGet);
             String jsonResponse = EntityUtils.toString(response.getEntity());
             JSONParser parser = new JSONParser();
-            System.out.println(jsonResponse);
+           // System.out.println(jsonResponse);
            
             JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
+            JSONObject books = (JSONObject) jsonObject.get("books");
+            JSONObject book9784102114018 = (JSONObject) books.get("9784102114018");
+          //  JSONObject a = (JSONObject) book9784102114018.getKeys();
+            for(String id : ids){
+                JSONObject a = (JSONObject) book9784102114018.get(id);
+                JSONObject b = (JSONObject) a.get("libkey");
+          //      System.out.println(a);
+                System.out.println(b);
+            }
+        //    String [] s = book9784102114018.keySet().toString().replace("[","").trim().replace("]","").split(",");
+    //        JSONArray array = (JSONArray) (books.get("9784102114018"));
+       
+
              // "continue" の値を取得
-             long continueValue = (Long) jsonObject.get("continue");
+            continueValue = (Long) jsonObject.get("continue");
 
              System.out.println("continue: " + continueValue);
 
@@ -189,9 +217,11 @@ try {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    
 
         return libraryAvailability;
     }
