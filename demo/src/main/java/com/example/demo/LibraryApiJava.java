@@ -190,10 +190,9 @@ try {
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             HttpResponse response = httpClient.execute(httpGet);
+            Thread.sleep(1000); 
             String jsonResponse = EntityUtils.toString(response.getEntity());
             JSONParser parser = new JSONParser();
-           // System.out.println(jsonResponse);
-           
             JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
             JSONObject books = (JSONObject) jsonObject.get("books");
             JSONObject book9784102114018 = (JSONObject) books.get("9784102114018");
@@ -201,13 +200,9 @@ try {
             for(String id : ids){
                 JSONObject a = (JSONObject) book9784102114018.get(id);
                 JSONObject b = (JSONObject) a.get("libkey");
-          //      System.out.println(a);
                 System.out.println(b);
             }
-        //    String [] s = book9784102114018.keySet().toString().replace("[","").trim().replace("]","").split(",");
-    //        JSONArray array = (JSONArray) (books.get("9784102114018"));
-       
-
+  
              // "continue" の値を取得
             continueValue = (Long) jsonObject.get("continue");
 

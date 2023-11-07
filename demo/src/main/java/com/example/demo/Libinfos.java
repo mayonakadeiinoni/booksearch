@@ -19,7 +19,7 @@ public class Libinfos {
     static String API_KEY_RAKU = "1095761689829578454"; // 楽天市場のAPIキー
     static String API_KEY_Lib = "f97ee4442195b7b3e53286cc4ad93d0c"; // 図書館APIキー
     private String[] Systemids;
-    private HashMap<String, String> libkeys;
+    private HashMap<String, String> libkeys; // key: Systemid , value: その図書館の蔵書の有無 
 
     // デフォルトコンストラクタ
     public Libinfos() {
@@ -99,9 +99,24 @@ public class Libinfos {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        // 重複を消す処理を挟む
+        
+        // 文字列をカンマで分割
+        String[] parts = systemidStr .split(",");
+        
+        // 重複を削除するためにセットを使用
+        Set<String> uniqueParts = new LinkedHashSet<>(Arrays.asList(parts));
+        
+        // 重複を削除した文字列をカンマで連結
+        systemidStr  = String.join(",", uniqueParts);
 
         return systemidStr;
     }
 
-// 上記2つのメソッドを組み合わせて、その市区町村のapi
+// 上記2つのメソッドを組み合わせて、その市区町村の入力から、範囲内の図書館のシステムidの文字列を返す関数
+    public String LibLocSearch(String pref, String city) {
+        return extractSystemIds(searchNearbyLibraries(pref, city));
+    }
+
+
 }
