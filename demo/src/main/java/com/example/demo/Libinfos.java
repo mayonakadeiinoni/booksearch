@@ -100,7 +100,7 @@ public class Libinfos {
             e.printStackTrace();
         }
         // 重複を消す処理を挟む
-        
+
         // 文字列をカンマで分割
         String[] parts = systemidStr .split(",");
         
@@ -116,6 +116,53 @@ public class Libinfos {
 // 上記2つのメソッドを組み合わせて、その市区町村の入力から、範囲内の図書館のシステムidの文字列を返す関数
     public String LibLocSearch(String pref, String city) {
         return extractSystemIds(searchNearbyLibraries(pref, city));
+    }
+
+// 入力：検索したい本のisbn番号,検索対象の図書館のsystemid
+// 出力： 図書館とその図書館の蔵書をkey ,valueにしたハッシュマップを返す関数
+    public String searchLibraryAvailability(String isbnNum, String systemidStr) {
+        String libraryAvailability = "";
+        String[] ids = systemidStr.split(",");
+        try {
+            String encodedISBN = java.net.URLEncoder.encode(isbnNum, "UTF-8");
+            String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
+            String url = "https://api.calil.jp/check?appkey=" + API_KEY_Lib
+                    + "&isbn=" + encodedISBN + "&systemid=" + systemidStr + "&format=json&callback="+"no";
+            long continueValue = 1;
+            while(continueValue == 1){
+        try {
+            HttpClient httpClient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpClient.execute(httpGet);
+            Thread.sleep(1000); 
+            String jsonResponse = EntityUtils.toString(response.getEntity());
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
+            JSONObject books = (JSONObject) jsonObject.get("books");
+            JSONObject book9784102114018 = (JSONObject) books.get("9784102114018");
+            for(String id : ids){
+                JSONObject a = (JSONObject) book9784102114018.get(id);
+                JSONObject b = (JSONObject) a.get("libkey");
+                System.out.println(b);
+           //     libkeys.put(id , b); ここから今度は再開しよう
+            }
+  
+             // "continue" の値を取得
+            continueValue = (Long) jsonObject.get("continue");
+
+             System.out.println("continue: " + continueValue);
+
+            libraryAvailability = jsonResponse;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+
+        return libraryAvailability;
     }
 
 
