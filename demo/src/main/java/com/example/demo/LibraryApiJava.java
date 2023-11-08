@@ -11,6 +11,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -21,7 +25,7 @@ public class LibraryApiJava {
     static String API_KEY_Lib = "f97ee4442195b7b3e53286cc4ad93d0c"; // 図書館APIキー
 
     public static void main(String[] args) {
-        String lineMessage = "仮面の告白/三島由紀夫/県/市"; // ここにLINEからのメッセージを設定
+        String lineMessage = "仮面の告白/三島由紀夫/愛知県/犬山市"; // ここにLINEからのメッセージを設定
         String[] lineMessageText = lineMessage.split("/");
         String bookName = lineMessageText[0];
         String author = lineMessageText[1];
@@ -136,7 +140,7 @@ try {
             String encodedCity = java.net.URLEncoder.encode(city, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
-                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=20&distance=50&format=json&callback="+encodedEmpty;
+                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=50&distance=1&format=json&callback="+encodedEmpty;
 
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
@@ -195,12 +199,16 @@ try {
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
             JSONObject books = (JSONObject) jsonObject.get("books");
-            JSONObject book9784102114018 = (JSONObject) books.get("9784102114018");
+            JSONObject book9784102114018 = (JSONObject) books.get(isbnNum);
+            System.out.println(book9784102114018);
+
           //  JSONObject a = (JSONObject) book9784102114018.getKeys();
             for(String id : ids){
                 JSONObject a = (JSONObject) book9784102114018.get(id);
                 JSONObject b = (JSONObject) a.get("libkey");
-                System.out.println(b);
+           //     System.out.println(new ArrayList(b.keySet()));
+           
+      
             }
   
              // "continue" の値を取得

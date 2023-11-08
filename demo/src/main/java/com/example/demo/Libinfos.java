@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import java.util.HashMap;
 import java.io.IOException;
 import org.apache.catalina.util.URLEncoder;
 import org.apache.http.HttpResponse;
@@ -15,19 +14,20 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 public class Libinfos {
     static String API_KEY_RAKU = "1095761689829578454"; // 楽天市場のAPIキー
     static String API_KEY_Lib = "f97ee4442195b7b3e53286cc4ad93d0c"; // 図書館APIキー
     private String[] Systemids;
-    private HashMap<String, String> libkeys; // key: Systemid , value: その図書館の蔵書の有無 
+    private HashMap<String, HitLib> libkeys; // key: Systemid , value: その図書館の蔵書の有無 
 
     // デフォルトコンストラクタ
     public Libinfos() {
         // デフォルトコンストラクタは空のままでOK
     }
 
-    // コンストラクタ
-    public Libinfos(String[] Systemids, HashMap<String, String> libkeys) {
+     // システムIDとHitLibのHashMapを受け取るコンストラクタ
+    public Libinfos(String[] Systemids, HashMap<String, HitLib> libkeys) {
         this.Systemids = Systemids;
         this.libkeys = libkeys;
     }
@@ -43,12 +43,12 @@ public class Libinfos {
     }
 
     // libkeys のsetter
-    public void setLibkeys(HashMap<String, String> libkeys) {
+    public void setLibkeys(HashMap<String, HitLib> libkeys) {
         this.libkeys = libkeys;
     }
 
     // libkeys のgetter
-    public HashMap<String, String> getLibkeys() {
+    public HashMap<String, HitLib> getLibkeys() {
         return libkeys;
     }
 
@@ -120,9 +120,11 @@ public class Libinfos {
 
 // 入力：検索したい本のisbn番号,検索対象の図書館のsystemid
 // 出力： 図書館とその図書館の蔵書をkey ,valueにしたハッシュマップを返す関数
-    public String searchLibraryAvailability(String isbnNum, String systemidStr) {
+    public HashMap<String, HitLib> searchLibraryAvailability(String isbnNum, String systemidStr) {
         String libraryAvailability = "";
         String[] ids = systemidStr.split(",");
+        HashMap<String, HitLib> libs = new HashMap<>();
+        HitLib lib = new HitLib();
         try {
             String encodedISBN = java.net.URLEncoder.encode(isbnNum, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
@@ -140,11 +142,19 @@ public class Libinfos {
             JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
             JSONObject books = (JSONObject) jsonObject.get("books");
             JSONObject book9784102114018 = (JSONObject) books.get("9784102114018");
+
             for(String id : ids){
                 JSONObject a = (JSONObject) book9784102114018.get(id);
+                lib.setReserveurl((String) a.get("reserveurl"));
                 JSONObject b = (JSONObject) a.get("libkey");
+                for(Object r  : new ArrayList(((JSONObject) a.get("libkey")).keySet())){
+                    String libStr = (String) r;
+                    String libSituation = (String) b.get(libStr);
+                    lib.getLibkey().put(libStr, libSituation);
+                }
                 System.out.println(b);
-           //     libkeys.put(id , b); ここから今度は再開しよう
+                libs.put(id , new HitLib(lib));
+                lib.getLibkey().clear();
             }
   
              // "continue" の値を取得
@@ -162,8 +172,14 @@ public class Libinfos {
         }
     
 
-        return libraryAvailability;
+        return libs;
     }
+
+      // toString メソッドを実装
+      @Override
+      public String toString() {
+          return "Libinfos [Systemids=" + Arrays.toString(Systemids) + ", libkeys=" + libkeys + "]";
+      }
 
 
 }

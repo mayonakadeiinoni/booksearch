@@ -33,6 +33,13 @@ public class test {
          infos = infos.RakutenBooksSearch(application);
          System.out.println(infos);
 
+        // 図書館api 実行
+        String isbnNum = "9784102114018";
+        Libinfos libinfos = new Libinfos();
+        libinfos.setLibkeys(libinfos.searchLibraryAvailability(isbnNum , libinfos.LibLocSearch(application.getPref() , application.getCity())));
+        System.out.println(libinfos);
+
+
          
         // 3. 中古本情報を取得
        // isbnNum = application.getIsbnNum();
