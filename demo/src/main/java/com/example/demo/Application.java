@@ -7,13 +7,19 @@ public class Application {
     private String author;
     private String pref;
     private String city;
-
+    private String geocode;
 
     public Application(String bookName, String author, String pref, String city) {
         this.bookName = bookName;
         this.author = author;
         this.pref = pref;
         this.city = city;
+    }
+
+    public Application (String bookName, String author , String geocode){
+         this.bookName = bookName;
+        this.author = author;
+        this.geocode = geocode;
     }
 
     public String getBookName() {
