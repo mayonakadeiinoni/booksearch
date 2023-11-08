@@ -1,7 +1,7 @@
+
 package com.example.demo;
 
 import java.io.IOException;
-import org.apache.catalina.util.URLEncoder;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -11,14 +11,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.io.*;
-import java.net.*;
 import java.util.*;
+import java.io.*;
 
 public class Libinfos {
     static String API_KEY_RAKU = "1095761689829578454"; // 楽天市場のAPIキー
     static String API_KEY_Lib = "f97ee4442195b7b3e53286cc4ad93d0c"; // 図書館APIキー
-    private String[] Systemids;
     private HashMap<String, HitLib> libkeys; // key: Systemid , value: その図書館の蔵書の有無 
 
     // デフォルトコンストラクタ
@@ -26,20 +24,9 @@ public class Libinfos {
         // デフォルトコンストラクタは空のままでOK
     }
 
-     // システムIDとHitLibのHashMapを受け取るコンストラクタ
-    public Libinfos(String[] Systemids, HashMap<String, HitLib> libkeys) {
-        this.Systemids = Systemids;
+    // システムIDとHitLibのHashMapを受け取るコンストラクタ
+    public Libinfos(HashMap<String, HitLib> libkeys) {
         this.libkeys = libkeys;
-    }
-
-    // Systemids のsetter
-    public void setSystemids(String[] Systemids) {
-        this.Systemids = Systemids;
-    }
-
-    // Systemids のgetter
-    public String[] getSystemids() {
-        return Systemids;
     }
 
     // libkeys のsetter
@@ -62,7 +49,7 @@ public class Libinfos {
             String encodedCity = java.net.URLEncoder.encode(city, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
-                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=20&distance=50&format=json&callback="+encodedEmpty;
+                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=100&distance=50&format=json&callback="+encodedEmpty;
 
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
@@ -175,11 +162,11 @@ public class Libinfos {
         return libs;
     }
 
-      // toString メソッドを実装
-      @Override
-      public String toString() {
-          return "Libinfos [Systemids=" + Arrays.toString(Systemids) + ", libkeys=" + libkeys + "]";
-      }
+     // toString メソッドを実装
+    @Override
+    public String toString() {
+        return "Libinfos [libkeys=" + libkeys + "]";
+    }
 
 
 }
