@@ -13,11 +13,12 @@ import org.json.simple.parser.ParseException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class GeocodingExample {
-    public static void main(String[] args) {
-  
-        String address = "東京都"; // 検索したい住所を設定
 
+// 住所から緯度経度を求める国土地理院apiを扱うクラス
+public class GeocodingExample {
+    public static String geocoding(String address) {
+  
+        String geocode = "";
         try {
             String encodedAddress = java.net.URLEncoder.encode(address, "UTF-8");
             String apiUrl ="https://msearch.gsi.go.jp/address-search/AddressSearch?q="+ encodedAddress;
@@ -58,6 +59,8 @@ public class GeocodingExample {
                     double latitude = (double) coordinates.get(1);
                     System.out.println("経度: " + longitude);
                     System.out.println("緯度: " + latitude);
+                    geocode = longitude + "," + latitude;
+                    System.out.println(geocode);
                 }
             }
         } catch (ParseException e) {
@@ -71,5 +74,7 @@ public class GeocodingExample {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return geocode;
     }
 }

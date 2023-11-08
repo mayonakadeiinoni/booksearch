@@ -49,7 +49,30 @@ public class Libinfos {
             String encodedCity = java.net.URLEncoder.encode(city, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
-                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=100&distance=50&format=json&callback="+encodedEmpty;
+                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=20&distance=50&format=json&callback="+encodedEmpty;
+
+            HttpClient httpClient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpClient.execute(httpGet);
+            String jsonResponse = EntityUtils.toString(response.getEntity());
+
+            libraryInfo = jsonResponse;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return libraryInfo;
+    }
+
+     // 住所の緯度、経度の文字列。返り値：図書館apiの返り値json 中にその市区町村にある図書館のシステムidがある。
+    public static String searchNearbyLibraries(String geocode) {
+        String libraryInfo = "";
+
+        try {
+            String gecoding = java.net.URLEncoder.encode(geocode, "UTF-8");
+            String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
+            String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
+                    + "&geocode=" + gecoding+"&limit=20&distance=5&format=json&callback="+encodedEmpty;
 
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
@@ -104,6 +127,10 @@ public class Libinfos {
     public String LibLocSearch(String pref, String city) {
         return extractSystemIds(searchNearbyLibraries(pref, city));
     }
+// 上記2つのメソッドを組み合わせて、その住所入力から、範囲内の図書館のシステムidの文字列を返す関数
+    public String LibLocSearch(String geocode) {
+        return extractSystemIds(searchNearbyLibraries(GeocodingExample.geocoding(geocode)));
+    }
 
 // 入力：検索したい本のisbn番号,検索対象の図書館のsystemid
 // 出力： 図書館とその図書館の蔵書をkey ,valueにしたハッシュマップを返す関数
@@ -129,19 +156,27 @@ public class Libinfos {
             JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
             JSONObject books = (JSONObject) jsonObject.get("books");
             JSONObject book9784102114018 = (JSONObject) books.get("9784102114018");
-
+           
             for(String id : ids){
+                 int count = 0;
                 JSONObject a = (JSONObject) book9784102114018.get(id);
                 lib.setReserveurl((String) a.get("reserveurl"));
                 JSONObject b = (JSONObject) a.get("libkey");
+                if(b != null){
                 for(Object r  : new ArrayList(((JSONObject) a.get("libkey")).keySet())){
                     String libStr = (String) r;
                     String libSituation = (String) b.get(libStr);
-                    lib.getLibkey().put(libStr, libSituation);
+                    if(!"{}".equals(libStr))
+                         lib.getLibkey().put(libStr, libSituation);
+                         count++;
                 }
-                System.out.println(b);
-                libs.put(id , new HitLib(lib));
-                lib.getLibkey().clear();
+            
+                if (count != 0)
+                   libs.put(id , new HitLib(lib));
+           //        System.out.println(libs);
+               
+            }
+             lib.getLibkey().clear();
             }
   
              // "continue" の値を取得

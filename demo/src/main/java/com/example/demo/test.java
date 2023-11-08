@@ -33,10 +33,15 @@ public class test {
          infos = infos.RakutenBooksSearch(application);
          System.out.println(infos);
 
-        // 図書館api 実行
+        // 図書館api 実行　市区町村で図書館検索バージョン
         String isbnNum = "9784102114018";
         Libinfos libinfos = new Libinfos();
         libinfos.setLibkeys(libinfos.searchLibraryAvailability(isbnNum , libinfos.LibLocSearch(application.getPref() , application.getCity())));
+        System.out.println(libinfos);
+           // 図書館api 実行　住所で図書館検索バージョン
+        String address = "愛知県名古屋市昭和区御器所街";
+        libinfos = new Libinfos();
+        libinfos.setLibkeys(libinfos.searchLibraryAvailability(isbnNum , libinfos.LibLocSearch(address)));
         System.out.println(libinfos);
 
 
