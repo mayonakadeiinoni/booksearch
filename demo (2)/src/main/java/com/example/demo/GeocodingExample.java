@@ -22,6 +22,7 @@ import org.json.simple.JSONObject;
 public class GeocodingExample {
     // インスタンスー
     private String jsonResponse; // apiで帰ってきた最初の緯度・経度のjson
+    private String title;
     // Empty constructor
      public GeocodingExample() {
     // Initialization code, if needed
@@ -34,6 +35,17 @@ public class GeocodingExample {
     // Setter for the JSON response
     public void setJsonResponse(String jsonResponse) {
         this.jsonResponse = jsonResponse;
+    }
+
+
+    // Getter for the title
+    public String getTitle() {
+        return title;
+    }
+
+    // Setter for the title
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String geocoding(String address) {
@@ -50,7 +62,7 @@ public class GeocodingExample {
                 System.out.println(jsonResponse);
 
                 // レスポンスをJSON形式としてパースし、緯度と経度を取得
-                 System.out.println(jsonResponse);
+              //   System.out.println(jsonResponse);
                 // ここでJSONをパースして緯度と経度を取得する処理を追加
             // JSONデータをパース
             JSONParser parser = new JSONParser();
@@ -60,6 +72,9 @@ public class GeocodingExample {
             // 最初の要素を取得
             if (!jsonArray.isEmpty()) {
                 JSONObject firstObject = (JSONObject) jsonArray.get(0);
+                JSONObject properties = (JSONObject) firstObject.get("properties");
+                String title = (String) properties.get("title");
+                setTitle(title); // ここに入れる。
                 setJsonResponse(firstObject.toString()); // ここに入れる。
 
                 // geometryオブジェクトの中からcoordinatesを取得
