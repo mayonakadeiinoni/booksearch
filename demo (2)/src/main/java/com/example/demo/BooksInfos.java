@@ -79,8 +79,8 @@ public class BooksInfos {
         String salesDate = (String) firstItema.get("salesDate");
         String seriesName = (String) firstItema.get("seriesName");
         String itemUrl =  (String) firstItema.get("itemUrl");
-    
-        BookInfo book = new BookInfo(bookName, author, isbnNum, itemCaption, itemPrice, publisherName, salesDate, seriesName,itemUrl) ;
+        String largeImageUrl =  (String) firstItema.get("largeImageUrl");
+        BookInfo book = new BookInfo(bookName, author, isbnNum, itemCaption, itemPrice, publisherName, salesDate, seriesName,itemUrl,largeImageUrl) ;
         infos.bookInfoList.add(book);
             
     }

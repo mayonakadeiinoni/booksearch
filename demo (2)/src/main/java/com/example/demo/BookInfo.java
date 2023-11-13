@@ -11,21 +11,25 @@ public class BookInfo {
     private String salesDate = "";
     private String seriesName = "";
     private String itemUrl = "";
-
+    private String largeImageUrl = "";
     public BookInfo(){
 
-    }
-    public BookInfo(String bookName, String author, String isbnNum, String itemCaption, long itemPrice, String publisherName, String salesDate, String seriesName,String itemUrl) {
+    }  public BookInfo(String bookName, String author, String isbnNum, String itemCaption, long itemPrice, String publisherName, String salesDate, String seriesName, String itemUrl, String largeImageUrl) {
         this.bookName = bookName;
         this.author = author;
         this.isbnNum = isbnNum;
         this.itemCaption = itemCaption;
-        
         this.itemPrice = itemPrice;
         this.publisherName = publisherName;
         this.salesDate = salesDate;
         this.seriesName = seriesName;
         this.itemUrl = itemUrl;
+        this.largeImageUrl = largeImageUrl; // 新しいフィールドの初期化
+    }
+
+    // 新しいゲッターメソッド
+    public String getLargeImageUrl() {
+        return largeImageUrl;
     }
 
     public String getBookName() {
