@@ -1,4 +1,3 @@
-
 package com.example.demo;
 
 import java.io.IOException;
@@ -129,7 +128,7 @@ public class Libinfos {
     }
 // 上記2つのメソッドを組み合わせて、その住所入力から、範囲内の図書館のシステムidの文字列を返す関数
     public String LibLocSearch(String geocode) {
-        return extractSystemIds(searchNearbyLibraries(GeocodingExample.geocoding(geocode)));
+        return extractSystemIds(searchNearbyLibraries(new GeocodingExample().geocoding(geocode)));
     }
 
 // 入力：検索したい本のisbn番号,検索対象の図書館のsystemid
@@ -155,7 +154,7 @@ public class Libinfos {
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
             JSONObject books = (JSONObject) jsonObject.get("books");
-            JSONObject book9784102114018 = (JSONObject) books.get("9784102114018");
+            JSONObject book9784102114018 = (JSONObject) books.get(isbnNum);//change from "9784102114018" to isbnNum
            
             for(String id : ids){
                  int count = 0;

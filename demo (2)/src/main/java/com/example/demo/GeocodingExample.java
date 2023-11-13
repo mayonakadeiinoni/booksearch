@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
-
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,28 +20,36 @@ import org.json.simple.JSONObject;
 
 // 住所から緯度経度を求める国土地理院apiを扱うクラス
 public class GeocodingExample {
-    public static String geocoding(String address) {
+    // インスタンスー
+    private String jsonResponse; // apiで帰ってきた最初の緯度・経度のjson
+    // Empty constructor
+     public GeocodingExample() {
+    // Initialization code, if needed
+    }
+    // Getter for the JSON response
+    public String getJsonResponse() {
+        return jsonResponse;
+    }
+
+    // Setter for the JSON response
+    public void setJsonResponse(String jsonResponse) {
+        this.jsonResponse = jsonResponse;
+    }
+
+    public String geocoding(String address) {
   
         String geocode = "";
         try {
             String encodedAddress = java.net.URLEncoder.encode(address, "UTF-8");
             String apiUrl ="https://msearch.gsi.go.jp/address-search/AddressSearch?q="+ encodedAddress;
 
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode == 200) {
-                Scanner scanner = new Scanner(connection.getInputStream());
-                StringBuilder response = new StringBuilder();
-                while (scanner.hasNext()) {
-                    response.append(scanner.nextLine());
-                }
-                scanner.close();
+                HttpClient httpClient = HttpClients.createDefault();
+                HttpGet httpGet = new HttpGet(apiUrl);
+                HttpResponse response = httpClient.execute(httpGet);
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                System.out.println(jsonResponse);
 
                 // レスポンスをJSON形式としてパースし、緯度と経度を取得
-                String jsonResponse = response.toString();
                  System.out.println(jsonResponse);
                 // ここでJSONをパースして緯度と経度を取得する処理を追加
             // JSONデータをパース
@@ -48,9 +60,11 @@ public class GeocodingExample {
             // 最初の要素を取得
             if (!jsonArray.isEmpty()) {
                 JSONObject firstObject = (JSONObject) jsonArray.get(0);
+                setJsonResponse(firstObject.toString()); // ここに入れる。
 
                 // geometryオブジェクトの中からcoordinatesを取得
                 JSONObject geometry = (JSONObject) firstObject.get("geometry");
+                System.out.println(geometry);
                 JSONArray coordinates = (JSONArray) geometry.get("coordinates");
 
                 // この配列から緯度と経度を取得
@@ -68,9 +82,7 @@ public class GeocodingExample {
         }
               //  System.out.println("緯度: " + latitude);
              //   System.out.println("経度: " + longitude);
-            } else {
-                System.out.println("HTTPリクエストが失敗しました。レスポンスコード: " + responseCode);
-            }
+        
         } catch (IOException e) {
             e.printStackTrace();
         }

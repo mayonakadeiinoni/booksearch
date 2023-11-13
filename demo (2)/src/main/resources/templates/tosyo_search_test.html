@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>tosyo_search_test</title>
+</head>
+<body>
+<form action="tosyo_search_test" method="post">
+  <input type="hidden" name="form_num" value=2 id="search">
+  <input type="hidden" name="isbnNum" th:value=${isbnNum}>
+  <!--<input type="text" name="pref" placeholder="pref" th:value=${pref}>-->
+  <select name="pref" required>
+    <th:block th:each="element,status : ${prefs}">
+    <option th:if="${element.equals(pref)}" selected>[[${element}]]</option>
+    <option th:if="${!element.equals(pref)}">[[${element}]]</option>
+    </th:block>
+  </select>
+  <input type="text" name="city" placeholder="city" th:value=${city}>
+  <button>submit</button>
+</form>
+<th:block th:if="${form_num!=1}">
+  result<br />
+</th:block>
+<th:block th:each="system : ${lib_map}">
+  [[${system.key}]]
+  <a th:href=${system.value.getReserveurl()} target="_blank">
+    予約サイト
+  </a> <br />
+  <table>
+    <th:block th:each="hitlib : ${system.value.getLibkey()}">
+      <tr>
+        <td>[[${hitlib.key}]]</td>
+        <td>[[${hitlib.value}]]</td>
+      </tr>
+    </th:block>
+  </table>
+</th:block>
+
+</body>
+</html>
