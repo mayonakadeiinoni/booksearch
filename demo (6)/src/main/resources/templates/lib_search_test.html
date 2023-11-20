@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!--<title>lib_search_test</title>-->
+<title>書籍検索</title>
+<link rel="stylesheet" th:href="@{/css/lib_search_test.css}">
+</head>
+<body>
+<h2 class="title">
+	書籍検索
+</h2>
+<form action="/lib_search_test" method="post">
+  <input type="hidden" name="form_num" value=1 id="search">
+  <input type="hidden" name="search_id" th:value=${info.getId()}>
+  <input type="text" name="parameter['author']" placeholder="author" th:value="${parameter.get('author')==null?'':parameter.get('author')}"><br />
+  <input type="text" name="parameter['title']" placeholder="title" th:value="${parameter.get('title')==null?'':parameter.get('title')}"><br />
+  <input type="text" name="parameter['publisherName']" placeholder="publisherName" th:value="${parameter.get('publisherName')==null?'':parameter.get('publisherName')}"><br />
+  <!--<input type="text" name="parameter['size']" placeholder="size" th:value="${parameter.get('size')==null?'':parameter.get('size')}"><br />-->
+  <select name="parameter['size']">
+    <th:block th:each="map : ${sizes}">
+    <option th:if="${map.key.equals(parameter.get('size'))}" th:value="${map.key}" selected>[[${map.value}]]</option>
+    <option th:if="${!map.key.equals(parameter.get('size'))}" th:value="${map.key}">[[${map.value}]]</option>
+    </th:block>
+  </select><br />
+  <input type="text" name="parameter['isbn']" placeholder="isbn" th:value="${parameter.get('isbn')==null?'':parameter.get('isbn')}"><br />
+  <input type="text" name="parameter['booksGenreId']" placeholder="booksGenreId" th:value="${parameter.get('booksGenreId')==null?'':parameter.get('booksGenreId')}"><br />
+  <!--<input type="text" name="parameter['sort']" placeholder="sort" th:value="${parameter.get('sort')==null?'':parameter.get('sort')}">-->
+  <select name="parameter['sort']">
+    <th:block th:each="map : ${orders}">
+    <option th:if="${map.key.equals(parameter.get('sort'))}" th:value="${map.key}" selected>[[${map.value}]]</option>
+    <option th:if="${!map.key.equals(parameter.get('sort'))}" th:value="${map.key}">[[${map.value}]]</option>
+    </th:block>
+  </select><br />
+  <button>検索</button>
+</form>
+<!--result-->
+<!--table-->
+<!--Attention!${}}}}}}}}-->
+<tr th:each="book,status : ${info.getBooks()}">
+  <th:block th:if="${status.first}">
+    <!--<form action="/lib_search_test" method="post">
+      <input type="hidden" name="form_num" value=2 id="order">
+      <input type="hidden" name="search_id" th:value=${info.getId()}>
+      <select name="order">
+        <option value=1 selected>order1</option>
+        <option value=2>order2</option>
+      </select>
+      <button>order change</button>
+    </form>-->
+    表示件数 : [[${info.getBooks().size()}]]<br />
+    [[${info.getPage()}]]ページ目<!--/[[${info.getLastPage()}]]ページ--><br />
+    <form action="/lib_search_test" method="post">
+      <input type="hidden" name="form_num" value=4 id="select">
+      <input type="hidden" name="search_id" th:value=${info.getId()}>
+      <textarea name="selector">[[${info.getSelector()}]]</textarea>
+      <button>絞り込む</button>
+    </form>
+  </th:block>
+  <!--
+  <td>[[${book.getBookName()}]]</td>
+  <td>[[${book.getAuthor()}]]</td>
+  <td>[[${book.getItemPrice()}]]</td>
+  <a th:href="@{'https://bookget.net/search?q='+${book.getIsbnNum()}}" target="_blank">
+    link
+  </a>
+  -->	<!-- 最初（と最後）にページ遷移のボタンをつける -->
+  <th:block th:if="${status.first}">
+	<div class="page">
+		<th:block th:if="${info.getPage()!=1}">
+			<button form="paging" name="page" th:value="${info.getPage()}-1">&lt;&lt;</button>
+    	</th:block>
+    	<!-- 現在のページ番号に色を付ける -->
+    	<!--<th:block th:each="page : ${pagelist}">
+			<th:block th:switch="${page}">
+				<button th:case=${info.getPage()} form="paging" name="page" th:value=${page} th:class="red-button">[[${page}]]</button>
+				<button th:case=* form="paging" name="page" th:value=${page}>[[${page}]]</button>
+			</th:block>
+		</th:block>-->
+		<th:block th:if="${!info.isLast()}">
+			<button form="paging" name="page" th:value="${info.getPage()}+1">&gt;&gt;</button>
+		</th:block>
+		<form action="/lib_search_test" method="post" id="paging">
+			<input type="hidden" name="form_num" value=3>
+			<input type="hidden" name="search_id" th:value=${info.getId()}>
+		</form>
+	</div>
+  </th:block>
+  <!-- 各本の情報 -->
+  <div class="frame">
+    <table class="comTable">
+      <thead>
+        <tr>
+          <th colspan="2">[[${book.getBookName()}]]</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>著者</th>
+          <td>[[${book.getAuthor()}]]</td>
+        </tr>
+        <tr>
+          <th>価格</th>
+          <td>[[${book.getItemPrice()}]]</td>
+        </tr>
+        <tr>
+          <th>Bookgetリンク</th>
+          <td>
+            <a th:href="@{'https://bookget.net/search?q='+${book.getIsbnNum()}}" target="_blank">
+              link
+            </a>
+          </td>
+          <td class="image">
+            <img th:src="${book.getLargeImageUrl()}" alt="[[${book.getLargeImageUrl()}]]">
+          </td>
+        </tr>
+        
+        <!--<td>
+          <table name="right">
+            <tr>
+              <th>著者</th>
+              <td>[[${book.getAuthor()}]]</td>
+            </tr>
+            <tr>
+              <th>価格</th>
+              <td>[[${book.getItemPrice()}]]</td>
+            </tr>
+            <tr>
+              <th>Bookgetリンク</th>
+              <td>
+                <a th:href="@{'https://bookget.net/search?q='+${book.getIsbnNum()}}" target="_blank">
+                  link
+                </a>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td class="image">
+          <table name="left">
+            <td>
+              <img th:src="${book.getLargeImageUrl()}" alt="[[${book.getLargeImageUrl()}]]">
+            </td>
+          </table>
+        </td>-->
+       
+      </tbody>
+    </table>
+  </div>
+  <form action="/tosyo_search_test" method="post" target="_blank">
+    <input type="hidden" name="isbnNum" th:value=${book.getIsbnNum()}>
+    <input type="hidden" name="form_num" value=1>
+    <button>tosyo_search</button>
+  </form>
+  <br />
+  <!--<th:block th:if="${status.last}">
+    <th:block th:if="${info.getPage()!=1}">
+      <button form="paging" name="page" th:value="${info.getPage()}-1">&lt;&lt;</button>
+    </th:block>
+    <!--<th:block th:each="page : ${pagelist}">
+      <button form="paging" name="page" th:value=${page}>[[${page}]]</button>
+    </th:block>-- >
+    <th:block th:if="${!info.isLast()}">
+      <button form="paging" name="page" th:value="${info.getPage()}+1">&gt;&gt;</button>
+    </th:block>
+    <form action="/lib_search_test" method="post" id="paging">
+      <input type="hidden" name="form_num" value=3>
+      <input type="hidden" name="search_id" th:value=${info.getId()}>
+    </form>
+  </th:block>-->
+  <th:block th:if="${status.last}">
+    <div class="page">
+      <th:block th:if="${info.getPage()!=1}">
+        <button form="paging" name="page" th:value="${info.getPage()}-1">&lt;&lt;</button>
+      </th:block>
+      <!-- 現在のページ番号に色を付ける -->
+      <!--<th:block th:each="page : ${pagelist}">
+        <th:block th:switch="${page}">
+          <button th:case=${info.getPage()} form="paging" name="page" th:value=${page} th:class="red-button">[[${page}]]</button>
+          <button th:case=* form="paging" name="page" th:value=${page}>[[${page}]]</button>
+        </th:block>
+      </th:block>-->
+      <th:block th:if="${!info.isLast()}">
+        <button form="paging" name="page" th:value="${info.getPage()}+1">&gt;&gt;</button>
+      </th:block>
+      <form action="/lib_search_test" method="post" id="paging">
+        <input type="hidden" name="form_num" value=3>
+        <input type="hidden" name="search_id" th:value=${info.getId()}>
+      </form>
+    </div>
+  </th:block>
+</tr>
+<!--/table-->
+</body>
+</html>

@@ -39,7 +39,7 @@ public class test {
         libinfos.setLibkeys(libinfos.searchLibraryAvailability(isbnNum , libinfos.LibLocSearch(application.getPref() , application.getCity())));
         System.out.println(libinfos);
            // 図書館api 実行　住所で図書館検索バージョン
-        String address = "千葉県浦安市舞浜１−１３";
+        String address = "愛知県名古屋市昭和区御器所街";
         libinfos = new Libinfos();
         libinfos.setLibkeys(libinfos.searchLibraryAvailability(isbnNum , libinfos.LibLocSearch(address)));
         System.out.println(libinfos);

@@ -11,27 +11,51 @@ public class BookInfo {
     private String salesDate = "";
     private String seriesName = "";
     private String itemUrl = "";
+    private String genreId="";
     private String largeImageUrl = "";
+    /**/private int id;/**/
+    
     public BookInfo(){
 
-    }  public BookInfo(String bookName, String author, String isbnNum, String itemCaption, long itemPrice, String publisherName, String salesDate, String seriesName, String itemUrl, String largeImageUrl) {
+    }
+    public BookInfo(String bookName, String author, String isbnNum, String itemCaption, long itemPrice, 
+    		String publisherName, String salesDate, String seriesName,String itemUrl,String largeImageUrl,String genreId) {
         this.bookName = bookName;
         this.author = author;
         this.isbnNum = isbnNum;
         this.itemCaption = itemCaption;
+        
         this.itemPrice = itemPrice;
         this.publisherName = publisherName;
         this.salesDate = salesDate;
         this.seriesName = seriesName;
         this.itemUrl = itemUrl;
         this.largeImageUrl = largeImageUrl; // 新しいフィールドの初期化
+        this.genreId=genreId;
+    }
+    /**temp*/
+    public BookInfo(/**/int id,/**/String bookName, String author, String isbnNum, String itemCaption, long itemPrice, String publisherName, String salesDate, String seriesName,String itemUrl) {
+        this.id=id;
+        this.bookName = bookName;
+        this.author = author;
+        this.isbnNum = isbnNum;
+        this.itemCaption = itemCaption;
+        
+        this.itemPrice = itemPrice;
+        this.publisherName = publisherName;
+        this.salesDate = salesDate;
+        this.seriesName = seriesName;
+        this.itemUrl = itemUrl;
     }
 
-    // 新しいゲッターメソッド
+    /**/public int getId() {
+    	return id;
+    }
+    
     public String getLargeImageUrl() {
         return largeImageUrl;
     }
-
+    
     public String getBookName() {
         return bookName;
     }
@@ -62,6 +86,14 @@ public class BookInfo {
 
     public String getSeriesName() {
         return seriesName;
+    }
+    
+    public String getItemUrl() {
+    	return itemUrl;
+    }
+    
+    public String getGenreId() {
+    	return genreId;
     }
 
      // toString()メソッドをオーバーライド

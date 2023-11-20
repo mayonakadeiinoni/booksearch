@@ -128,7 +128,7 @@ public class Libinfos {
     }
 // 上記2つのメソッドを組み合わせて、その住所入力から、範囲内の図書館のシステムidの文字列を返す関数
     public String LibLocSearch(String geocode) {
-        return extractSystemIds(searchNearbyLibraries(new GeocodingExample().geocoding(geocode)));
+        return extractSystemIds(searchNearbyLibraries(geocode));
     }
 
 // 入力：検索したい本のisbn番号,検索対象の図書館のsystemid

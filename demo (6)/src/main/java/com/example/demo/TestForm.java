@@ -12,6 +12,7 @@ public class TestForm {
 	}
 	public void setCheck(List<Integer> check) {
 		//this.check.add(check);
+		System.out.println("setting");
 		this.check=check;
 	}
 }

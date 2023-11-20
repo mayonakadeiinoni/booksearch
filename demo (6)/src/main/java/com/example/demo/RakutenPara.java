@@ -49,6 +49,7 @@ public class RakutenPara {
     // Setter for the parameter
     public void setParameter(HashMap<String, String> parameter) {
     	this.parameter=new HashMap<>();
+    	System.out.println("set");
     	for(String key:parameter.keySet()) {
     		setMap(key,parameter.get(key));
     	}
@@ -62,7 +63,8 @@ public class RakutenPara {
      * @param input 入力値
      */
     public void setMap(String genre, String input) {
-    	if(NoBanSet.contains(parameter)) flag=true;
+    	if(input==null||"".equals(input.trim())) return;
+    	if(NoBanSet.contains(genre)) flag=true;
         this.parameter.put(genre, input);
     }
 
@@ -108,8 +110,9 @@ public class RakutenPara {
     public static void main(String[] args) {
         RakutenPara test = new RakutenPara();
 
-        test.setMap("author", "太陽");
-        test.setMap("publisheme", "講談社");
+        //test.setMap("author", "太陽");
+        //test.setMap("publisheme", "講談社");
+        test.setMap("size", ""+10);
 
         System.out.println(test.GenerateRakutenApi());
     }

@@ -18,6 +18,14 @@
   <input type="text" name="city" placeholder="city" th:value=${city}>
   <button>submit</button>
 </form>
+<form action="tosyo_search_test" method="post">
+  <input type="hidden" name="form_num" value=3 id="search">
+  <input type="hidden" name="isbnNum" th:value=${isbnNum}>
+  <input th:if="${address!=null}" type="text" name="address" th:value=${address} required>
+  <input th:if="${address==null}" type="text" name="address" required>
+  
+  <button>submit</button>
+</form>
 <th:block th:if="${form_num!=1}">
   result<br />
 </th:block>
