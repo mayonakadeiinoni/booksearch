@@ -48,7 +48,7 @@ public class Libinfos {
             String encodedCity = java.net.URLEncoder.encode(city, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
-                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=20&distance=50&format=json&callback="+encodedEmpty;
+                    + "&pref=" + encodedPref + "&city=" + encodedCity + "&limit=100&distance=70&format=json&callback="+encodedEmpty;
 
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
@@ -71,7 +71,7 @@ public class Libinfos {
             String gecoding = java.net.URLEncoder.encode(geocode, "UTF-8");
             String encodedEmpty = java.net.URLEncoder.encode("", "UTF-8");
             String url = "https://api.calil.jp/library?appkey=" + API_KEY_Lib
-                    + "&geocode=" + gecoding+"&limit=20&distance=5&format=json&callback="+encodedEmpty;
+                    + "&geocode=" + gecoding+"&limit=100&distance=50&format=json&callback="+encodedEmpty;
 
             HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
