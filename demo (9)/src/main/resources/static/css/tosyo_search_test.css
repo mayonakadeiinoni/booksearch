@@ -1,0 +1,118 @@
+@charset "UTF-8";
+
+body{
+	margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+h2.title{
+	width: 700px;
+	background: #99c1f1; 
+	font-size: 300%;
+	padding: 50px;
+	/* margin-bottom: 30px; */
+	text-align: center;
+	color: #fff; 
+	
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.result{
+	margin:0em ;
+	display:inline-block;
+	position:relative;
+	top:3px;
+	padding:0 .5em;
+	height:1.5em;
+	line-height:1.5em;
+	color:#ffffff;
+	background:rgb(192, 192, 192);
+	font-weight:bold;
+	text-align:center;
+	border-radius:5px 5px 0 0;
+	margin-left: 90px;
+}
+
+div.result_back{
+	background:rgb(255, 255, 255);
+	border:solid 3px rgb(192, 192, 192);
+	border-radius:0 5px 5px;
+	padding:20px;
+	font-size: 100%;
+	margin-top: 1px;
+	margin-left: 90px;
+	margin-right: 90px;
+}
+
+div.frame{
+	width: 700px;
+	padding: 10px;
+	margin-bottom: 20px;
+	border: 5px double #333333;
+	border-radius: 10px;
+	
+	margin-left: auto;
+	margin-right: auto;
+	
+	text-align: center;
+}
+
+table.comTable
+{
+  width: 100%;
+}
+
+table.comTable th
+{
+  width: 20%;
+  border: 1px solid #333;
+}
+
+table.comTable td{
+  border: 1px solid #333;
+}
+
+td.image{
+	width: 200px;
+	height: 200px;
+	border: 0px solid rgb(255, 255, 255);
+}
+
+thead {
+  background-color: #57e389;
+  color: #fff;
+}
+
+tbody tr th {
+  background-color: rgb(128, 128, 128);
+  color: #fff;
+}
+
+a{
+	text-align: center;
+}
+
+table.search_table{
+	width: 640px;
+	border: 1px solid rgb(128, 128, 128);
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+}
+
+button.search{
+	margin-left:50px;
+	font-size: 100%;
+	width: 3em;
+	height:1.7em;
+}
+
+input.city_input {
+	width: 238px
+}
+
+input.address_input {
+	width: 320px
+}

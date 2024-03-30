@@ -1,0 +1,160 @@
+@charset "UTF-8";
+
+body{
+	margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+h2.title{
+	width: 700px;
+	background: #99c1f1; 
+	font-size: 300%;
+	padding: 50px;
+	/* margin-bottom: 30px; */
+	text-align: center;
+	color: #fff; 
+	
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* div */
+
+div.sort_and_dispNum{
+  display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 7px 5px;
+    margin-left: 9%;
+	margin-right: 9%;
+	
+	border: 1px solid #333;
+}
+
+div.sort {
+	display: flex;
+    align-items: center;
+    float: left;
+    padding-right: 12px;
+}
+
+div.dispNum {
+	display: flex;
+    align-items: center;
+    order: 2;
+    margin-left: auto;
+}
+
+div.narrow{
+	display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 7px 5px;
+    margin-left: 9%;
+	margin-right: 9%;
+	
+/*	border: 1px solid #333;*/
+}
+
+div.page{
+	text-align: center;
+	margin: 20px;
+}
+
+div.frame{
+	width: 700px;
+	padding: 10px;
+	margin-bottom: 30px;
+	border: 5px double #333333;
+	border-radius: 10px;
+	
+	margin-left: auto;
+	margin-right: auto;
+	
+	text-align: center;
+}
+
+/* table */
+
+table.comTable
+{
+  width: 100%;
+}
+
+table.comTable th{
+  width: 20%;
+  border: 1px solid #333;
+}
+
+table.comTable td{
+	
+  border: 1px solid #333;
+}
+
+thead {
+  background-color: #57e389;
+  color: #fff;
+}
+
+tbody tr th {
+  background-color: rgb(128, 128, 128);
+  color: #fff;
+}
+
+td.image{
+	width: 200px;
+	height: 200px;
+	border: 0px solid rgb(255, 255, 255);
+}
+
+td.button{
+	width:7em;
+}
+
+td.genre{
+/*	width:200px;*/
+}
+
+a{
+	text-align: center;
+}
+
+table.search_table{
+	width: 640px;
+	border: 1px solid rgb(128, 128, 128);
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+}
+
+button.search{
+	font-size: 100%;
+	width: 5em;
+	height:5em;
+}
+
+.red-button{
+	color: red;
+}
+
+input.text_input {
+	width: 95%
+}
+
+.help_toggle {
+	cursor: pointer;
+	background-color: rgb(210, 210, 210);
+}
+
+.help_content{
+	margin-top: 5px;
+	padding: 5px;
+	border: 1px solid #333333;
+	border-radius: 15px;
+}
+
+/* width: 100%;で残りスペースを埋める */
+.spacer {
+  width: 100%;
+}
