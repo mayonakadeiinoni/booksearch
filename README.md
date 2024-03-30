@@ -24,7 +24,7 @@
 
 ## システムのデモ
 
-以下は、本検索アプリのデモ動画です。
+以下は、本検索アプリのデモ動画です。(github上では動画を出せなかったので、demo1.mp4を参照してください。)
 
 <video src="demo1.mp4" width="640" height="360" controls>
   Your browser does not support the video tag.
