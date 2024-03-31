@@ -7,8 +7,7 @@
 ## インストール方法
 
 1. このリポジトリをクローンします。
-    ```
-    git clone https://github.com/ユーザー名/リポジトリ名.git
+    ```  git@github.com:mayonakadeiinoni/booksearch.git
     ```
 ## 実行方法
 1. vscodeでdemo内のdemo\src\main\java\com\example\demo\DemoApplication.javaを実行します。カレントディレクトリは、demoにしてください。
